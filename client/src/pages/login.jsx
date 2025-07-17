@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useEffect,useRef} from "react";
+import axios from "axios";
 
-const login = () => {
+const Login = () => {
+  const form = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form.current);
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    try {
+      const response = await axios.post("http://localhost:3000/api/signIn", data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
   return (
     <div>
-    <div className="container">
-      <div className="main-content">
-        <div className="logo">
-          <span className="logo-symbol">√</span>
-          <span className="logo-text">pasthit</span>
+      <div className="">
+        <div className=" w-[90vw] justify-start flex">
+          <img src="./Upasthit_Logo.png" alt="upasthit" className="m-[50px]" />
         </div>
 
         <h1 className="welcome-heading">Welcome to Upasthit</h1>
@@ -20,24 +36,31 @@ const login = () => {
               </div>
             </div>
 
-            <h2 className="login-heading">Login</h2>
+            <h2 className="login-heading  bg-amber-100 text-2xl">Login</h2>
 
-            <form className="login-form" id="loginForm">
+            <form
+              className="login-form"
+              id="loginForm"
+              ref={form}
+              onSubmit={handleSubmit}
+            >
               <div className="form-group">
-                <label for="email" className="form-label">Email Address</label>
+                <label htmlFor="email" className="form-label">Email Address</label>
                 <input
                   id="email"
                   type="email"
                   className="form-input"
+                  name="email"
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label for="password" className="form-label">Password</label>
+                <label htmlFor="password" className="form-label">Password</label>
                 <input
                   id="password"
                   type="password"
+                  name="password"
                   className="form-input"
                   required
                 />
@@ -59,8 +82,7 @@ const login = () => {
         </div>
       </div>
     </div>
-    </div>
   );
 };
 
-export default login;
+export default Login;
